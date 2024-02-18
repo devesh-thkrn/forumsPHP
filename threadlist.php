@@ -16,7 +16,15 @@
     <?php include 'partials/_header.php'; ?>
     <?php include 'partials/_dbconnect.php'; ?>
 
-
+    <?php 
+        $id = $_GET['catid'];
+        $sql = "SELECT * FROM `categories` WHERE `category_id` = $id";
+        $result = mysqli_query($conn, $sql);
+        while($row = mysqli_fetch_assoc($result)){
+            $catname = $row['category_name'];
+            $catdesc = $row['category_description'];
+        }
+    ?>
 
 
 
@@ -25,9 +33,8 @@
 
         <div class="p-5 mb-4 bg-body-tertiary rounded-3">
             <div class="container-fluid py-5">
-                <h1 class="display-5 fw-bold">Welcome to the Python Forum</h1>
-                <p class="col-md-8 fs-4">Python is a versatile high level language that has gained popularity over the
-                    last two decades.</p>
+                <h1 class="display-5 fw-bold">Welcome to the <?php echo $catname.' Forums';?></h1>
+                <p class="col-md-8 fs-4"><?php echo $catdesc; ?></p>
                 <hr class="my-4">
                 <p style="color: gray;"> - Participate in online forums as you would in constructive, face-to-face discussions.<br>
                     - Postings should continue a conversation and provide avenues for additional continuous dialogue. <br>
