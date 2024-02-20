@@ -22,7 +22,7 @@
         </ol>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="https://source.unsplash.com/1000x300/?coding,macbook" class="d-block w-100" alt="...">
+                <img src="https://source.unsplash.com/1000x300/?coding,macbook" class="d-block w-100" alt="..." style="">
             </div>
             <div class="carousel-item">
                 <img src="https://source.unsplash.com/1000x300/?coding,python" class="d-block w-100" alt="...">
@@ -57,11 +57,11 @@
         $desc = $row['category_description'];
         echo '<div class="col-md-4 my-2">
                 <div class="card">
-                  <img src="https://source.unsplash.com/00x200/?coding,'.$cat.'" class="card-img-top" alt="...">
+                  <img src="https://source.unsplash.com/200x200/?coding,'.$cat.'" class="card-img-top" alt="... style="  min-width: 200px; max-width: 200px;min-height: 200px; max-height: 200px;">
                   <div class="card-body">
-                    <h5 class="card-title"><a href="threadlist.php?catid=' .$id. ' "> ' .$cat. ' </a></h5>
+                    <h5 class="card-title"><a href="threadlist.php?catid=' .$id. ' " class="text-dark"> ' .$cat. ' </a></h5>
                     <p class="card-text">'.substr($desc, 0, 50).'...</p>
-                    <a href="threadlist.php?catid=' .$id. ' " class="btn btn-primary">View Threads</a>
+                    <a href="threadlist.php?catid=' .$id. ' " class="btn btn-success">View Threads</a>
                   </div>
                 </div>
               </div>';

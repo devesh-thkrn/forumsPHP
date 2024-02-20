@@ -17,14 +17,17 @@
     <?php include 'partials/_dbconnect.php'; ?>
 
     <?php
+        $noResult = true;
         $id = $_GET['threadid'];
         $sql = "SELECT * FROM `threads` WHERE `thread_id` = $id";
         $result = mysqli_query($conn, $sql);
         while($row = mysqli_fetch_assoc($result)){
+            $noResult = false;
             $title = $row['thread_title'];
             $desc = $row['thread_desc'];
             $user = $row['thread_user_id'];
         }
+
     ?>
 
 
@@ -69,6 +72,7 @@
         //         '. $row['thread_desc'] . '
         //         </div>
         //     </div>';
+    
         // };
         ?>
     </div>
