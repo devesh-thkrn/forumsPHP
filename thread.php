@@ -51,29 +51,37 @@
         </div>
     </div>
 
+    <div class="container">
+        <h1 class="py-2">Post a comment</h1>
+        <form action = "<?php $_SERVER['REQUEST_URI']?>" method="POST">
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Type your comment here</label>
+                <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Post Comment</button>
+        </form>
+    </div>
+
     <div class="container my-5">
         <h1 class="py-3">Discussions</h1>
+
         <?php 
-        // $id = $_GET['catid'];
-        // $sql = "SELECT * FROM `threads` WHERE `thread_cat_id` = $id";
-        // $result = mysqli_query($conn, $sql);
-        // while($row = mysqli_fetch_assoc($result)){
-        //     $id = $row['thread_id'];
-        //     $title = $row['thread_title'];
-        //     $desc = $row['thread_desc'];
-        //     echo '<div class="media my-3 d-flex gap-3">
-        //         <div class="flex-shrink-0 mb-3">
-        //             <img src="img/user.png" alt="User Icon" class="image-fluid object-fit-contain d-inline" style="width: 50px;">
-        //         </div>
-        //         <div class="media body">
-        //         <h5 class="d-inline"><a href="thread.php?threadid=' . $id . '" class="text-dark">
-        //             '. $row['thread_title'] .'
-        //         </a></h5><br>
-        //         '. $row['thread_desc'] . '
-        //         </div>
-        //     </div>';
+        $id = $_GET['threadid'];
+        $sql = "SELECT * FROM `comments` WHERE `thread_id` = $id";
+        $result = mysqli_query($conn, $sql);
+        while($row = mysqli_fetch_assoc($result)){
+            $id = $row['comment_id'];
+            $content = $row['comment_content'];
+
+            echo '<div class="media my-3 d-flex gap-3">
+                <div class="flex-shrink-0 mb-3">
+                    <img src="img/user.png" alt="User Icon" class="image-fluid object-fit-contain d-inline" style="width: 50px;">
+                </div>
+                <div class="media body">
+                ' . $content . '
+            </div>';
     
-        // };
+        };
         ?>
     </div>
 
