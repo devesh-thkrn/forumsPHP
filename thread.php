@@ -1,4 +1,6 @@
-<?php 
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 ?>
 
 <!doctype html>
@@ -16,6 +18,27 @@
     <?php include 'partials/_header.php'; ?>
     <?php include 'partials/_dbconnect.php'; ?>
 
+    <?php
+        // inserting into comment db
+        $showAlert = false;
+        $method = $_SERVER['REQUEST_METHOD'];
+        $id = $_GET['threadid'];
+        if($method == 'POST'){
+            //Inserting the thread into db
+            $comment = $_POST['comment'];
+            $sql = "INSERT INTO `comments` (`comment_id`, `comment_content`, `thread_id`, `comment_by`, `comment_time`) VALUES (NULL, '$comment', '$id', '0', current_timestamp())";
+            $result = mysqli_query($conn, $sql);
+            $showAlert = true;
+        }
+    ?>
+    <?php if($showAlert){
+        echo'
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> Your comment has been added to the thread!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>';
+    };
+    ?>
     <?php
         $noResult = true;
         $id = $_GET['threadid'];
@@ -46,14 +69,14 @@
                     - Do not post “I agree,” or similar, statements. <br>
                     - Stay on the topic of the thread – do not stray.
                 </p>
-                <p><b> Posted By: <?php echo $user; ?> </b></p> 
+                <p><b> Posted By: <?php echo $user; ?> </b></p>
             </div>
         </div>
     </div>
 
     <div class="container">
         <h1 class="py-2">Post a comment</h1>
-        <form action = "<?php $_SERVER['REQUEST_URI']?>" method="POST">
+        <form action="<?php $_SERVER['REQUEST_URI']?>" method="POST">
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Type your comment here</label>
                 <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
@@ -72,13 +95,15 @@
         while($row = mysqli_fetch_assoc($result)){
             $id = $row['comment_id'];
             $content = $row['comment_content'];
-
+            $comment_datetime = $row['comment_time'];
             echo '<div class="media my-3 d-flex gap-3">
                 <div class="flex-shrink-0 mb-3">
                     <img src="img/user.png" alt="User Icon" class="image-fluid object-fit-contain d-inline" style="width: 50px;">
                 </div>
                 <div class="media body">
-                ' . $content . '
+                    <p class="my-0"><b>Anonymous User at : '. $comment_datetime .'</b></p>
+                    ' . $content . '
+                </div>
             </div>';
     
         };

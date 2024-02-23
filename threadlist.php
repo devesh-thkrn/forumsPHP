@@ -98,11 +98,13 @@ ini_set('display_errors', '1');
             $id = $row['thread_id'];
             $title = $row['thread_title'];
             $desc = $row['thread_desc'];
+            $thread_datetime = $row['timestamp'];
             echo '<div class="media my-3 d-flex gap-3">
                 <div class="flex-shrink-0 mb-3">
                     <img src="img/user.png" alt="User Icon" class="image-fluid object-fit-contain d-inline" style="width: 50px;">
                 </div>
                 <div class="media body">
+                <p class="my-0"><b>Anonymous User at : '. $thread_datetime .'</b></p>
                 <h5 class="d-inline"><a href="thread.php?threadid='. $id .'" class="text-dark">
                     '. $row['thread_title'] .'
                 </a></h5><br>
