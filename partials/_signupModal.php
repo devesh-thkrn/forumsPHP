@@ -3,10 +3,10 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="signupModalLabel">Modal title</h1>
+                <h1 class="modal-title fs-5" id="signupModalLabel">Sign Up</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="/Applications/XAMPP/xamppfiles/htdocs/forums/partials/_handleSignup.php" method="POST">
+            <form action="partials/_handleSignup.php" method="POST">
             <div class="modal-body">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
@@ -15,7 +15,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="signupPassword" name="signupPassword">
+                        <input type="password" class="form-control"x id="signupPassword" name="signupPassword">
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Confirm Password</label>
