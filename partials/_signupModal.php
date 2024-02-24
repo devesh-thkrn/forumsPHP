@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5" id="signupModalLabel">Modal title</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form>
+            <form action="/Applications/XAMPP/xamppfiles/htdocs/forums/partials/_handleSignup.php" method="POST">
             <div class="modal-body">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
@@ -29,7 +29,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                
             </div>
             </form>
         </div>
