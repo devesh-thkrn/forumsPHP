@@ -51,7 +51,7 @@ ini_set('display_errors', '1');
     <!-- Fetch all the categories -->
     <!-- Category container starts here -->
     <div class="container my-4" id="ques">
-  <h2 class="text-center my-4">iDiscuss - Browse Categories</h2>
+  <h2 class="text-center my-4">WeDiscuss - Browse Categories</h2>
   <div class="row my-6">
     <?php 
       $sql = "SELECT * FROM `categories`";

@@ -24,9 +24,19 @@ ini_set('display_errors', '1');
         $method = $_SERVER['REQUEST_METHOD'];
         $id = $_GET['threadid'];
         if($method == 'POST'){
+            $user_email = $_SESSION['useremail'];
+            $sql = "SELECT * FROM `users` WHERE `user_email` = '$user_email'";
+            $result = mysqli_query($conn, $sql);
+            $row = mysqli_fetch_assoc($result);
+            $user_sno= $row['sno'];
             //Inserting the thread into db
             $comment = $_POST['comment'];
-            $sql = "INSERT INTO `comments` (`comment_id`, `comment_content`, `thread_id`, `comment_by`, `comment_time`) VALUES (NULL, '$comment', '$id', '0', current_timestamp())";
+            $comment = str_replace("<", "&lt;", $comment);
+            $comment = str_replace(">", "&gt;", $comment);
+
+            // $comment = str_replace(">" , $comment, "&gt;");
+            // $comment = str_replace("<" , $comment, "&lt;");
+            $sql = "INSERT INTO `comments` (`comment_id`, `comment_content`, `thread_id`, `comment_by`, `comment_time`) VALUES (NULL, '$comment', '$id', '$user_sno', current_timestamp())";
             $result = mysqli_query($conn, $sql);
             $showAlert = true;
         }
@@ -49,6 +59,7 @@ ini_set('display_errors', '1');
             $title = $row['thread_title'];
             $desc = $row['thread_desc'];
             $user = $row['thread_user_id'];
+
         }
 
     ?>
@@ -69,21 +80,36 @@ ini_set('display_errors', '1');
                     - Do not post “I agree,” or similar, statements. <br>
                     - Stay on the topic of the thread – do not stray.
                 </p>
-                <p><b> Posted By: <?php echo $user; ?> </b></p>
+                <?php
+                $sql2 = "SELECT user_email FROM `users` WHERE sno='$user'";
+                $result2 = mysqli_query($conn, $sql2);
+                $row2 = mysqli_fetch_assoc($result2);
+                $user_email = $row2['user_email'];
+                ?>
+                <p><b> Posted By: <?php echo $user_email; ?> </b></p>
             </div>
         </div>
     </div>
 
+
+    <?php 
+ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true){
+    echo '
     <div class="container">
         <h1 class="py-2">Post a comment</h1>
-        <form action="<?php $_SERVER['REQUEST_URI']?>" method="POST">
+        <form action="'. $_SERVER['REQUEST_URI']. '" method="POST">
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Type your comment here</label>
                 <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
             </div>
             <button type="submit" class="btn btn-success">Post Comment</button>
         </form>
-    </div>
+    </div>';
+}
+else{
+    echo "<div class='container'><h1 class='py-2'>Post a comment!</h1><p style:'color:grey;'>You are not logged in.</p></div>";
+};
+?>
 
     <div class="container my-5">
         <h1 class="py-3">Discussions</h1>
@@ -96,12 +122,17 @@ ini_set('display_errors', '1');
             $id = $row['comment_id'];
             $content = $row['comment_content'];
             $comment_datetime = $row['comment_time'];
+            $thread_user_id = $row['comment_by'];
+            $sql2 = "SELECT user_email FROM `users` WHERE sno='$thread_user_id'";
+            $result2 = mysqli_query($conn, $sql2);
+            $row2 = mysqli_fetch_assoc($result2);
+            $user_email = $row2['user_email'];
             echo '<div class="media my-3 d-flex gap-3">
                 <div class="flex-shrink-0 mb-3">
                     <img src="img/user.png" alt="User Icon" class="image-fluid object-fit-contain d-inline" style="width: 50px;">
                 </div>
                 <div class="media body">
-                    <p class="my-0"><b>Anonymous User at : '. $comment_datetime .'</b></p>
+                    <p class="my-0"><b>'. $user_email .' at : '. $comment_datetime .'</b></p>
                     ' . $content . '
                 </div>
             </div>';

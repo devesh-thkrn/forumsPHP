@@ -22,10 +22,23 @@ ini_set('display_errors', '1');
         $showAlert = false;
         $method = $_SERVER['REQUEST_METHOD'];
         if($method == 'POST'){
+            $user_email = $_SESSION['useremail'];
+            $sql = "SELECT * FROM `users` WHERE `user_email` = '$user_email'";
+            $result = mysqli_query($conn, $sql);
+            $row = mysqli_fetch_assoc($result);
+            $user_sno= $row['sno'];
             //Inserting the thread into db
             $th_title = $_POST['title'];
+            $th_title = str_replace("<", "&lt;", $th_title);
+            $th_title = str_replace(">", "&gt;", $th_title);
+
+
             $th_desc =  $_POST['desc'];
-            $sql = "INSERT INTO `threads` (`thread_id`, `thread_title`, `thread_desc`, `thread_cat_id`, `thread_user_id`, `timestamp`) VALUES (NULL, '$th_title', '$th_desc', '$id', '0', current_timestamp())";
+            $th_desc = str_replace("<", "&lt;", $th_desc);
+            $th_desc = str_replace(">", "&gt;", $th_desc);
+
+            
+            $sql = "INSERT INTO `threads` (`thread_id`, `thread_title`, `thread_desc`, `thread_cat_id`, `thread_user_id`, `timestamp`) VALUES (NULL, '$th_title', '$th_desc', '$id', '$user_sno', current_timestamp())";
             $result = mysqli_query($conn, $sql);
             $showAlert = true;
 
@@ -70,21 +83,29 @@ ini_set('display_errors', '1');
         </div>
     </div>
 
-    <div class="container">
-        <h1 class="py-2">Ask A Question</h1>
-        <form action = "<?php $_SERVER['REQUEST_URI']?>" method="POST">
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Problem Title</label>
-                <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text">Please keep title as concise as possible.</div>
-            </div>
-            <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Problem Description</label>
-                <textarea class="form-control" id="desc" name="desc" rows="3"></textarea>
-            </div>
-            <button type="submit" class="btn btn-success">Submit</button>
-        </form>
-    </div>
+<?php 
+ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true){
+    echo ' <div class="container">
+            <h1 class="py-2">Ask A Question</h1>
+            <form action = "' .$_SERVER["REQUEST_URI"]. '"method="POST">
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Problem Title</label>
+                    <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp">
+                    <div id="emailHelp" class="form-text">Please keep title as concise as possible.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Problem Description</label>
+                    <textarea class="form-control" id="desc" name="desc" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>';
+}
+else{
+    echo "<div class='container'><h1 class='py-2'>Ask A Question</h1><p style:'color:grey;'>You are not logged in.</p></div>";
+};
+
+?>
     <div class="container my-5" id="ques">
         <h1 class="py-3">Browse Questions</h1>
         <?php
@@ -98,13 +119,18 @@ ini_set('display_errors', '1');
             $id = $row['thread_id'];
             $title = $row['thread_title'];
             $desc = $row['thread_desc'];
-            $thread_datetime = $row['timestamp'];
+            $thread_user_id = $row['thread_user_id'];
+            $sql2 = "SELECT * FROM `users` WHERE `sno` ='$thread_user_id'";
+            $result2 = mysqli_query($conn, $sql2);
+            $row2 = mysqli_fetch_assoc($result2);
+            $user_email = $row2['user_email'];
+            $thread_datetime = $row2['timestamp'];
             echo '<div class="media my-3 d-flex gap-3">
                 <div class="flex-shrink-0 mb-3">
                     <img src="img/user.png" alt="User Icon" class="image-fluid object-fit-contain d-inline" style="width: 50px;">
                 </div>
                 <div class="media body">
-                <p class="my-0"><b>Anonymous User at : '. $thread_datetime .'</b></p>
+                <p class="my-0"><b>'. $user_email .' at : '. $thread_datetime .'</b></p>
                 <h5 class="d-inline"><a href="thread.php?threadid='. $id .'" class="text-dark">
                     '. $row['thread_title'] .'
                 </a></h5><br>
